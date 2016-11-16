@@ -1,0 +1,25 @@
+{
+    "name": "sunnysideup/ecommerce_orderstep_payment_check",
+    "type": "silverstripe-module",
+    "description": "add a feedbck step to silverstripe e-commerce",
+    "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
+    "authors": [
+        {
+            "name": "Nicolaas Francken",
+            "email": "modules@sunnysideup.co.nz",
+            "role": "lead developer"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "^3.4",
+        "sunnysideup/ecommerce": "*"
+    },
+    "extra": {
+        "installer-name": "ecommerce_orderstep_payment_check"
+    },
+    "keywords": [
+        "Silverstripe-CMS",
+        "CMS",
+        "Silverstripe"
+    ]
+}
