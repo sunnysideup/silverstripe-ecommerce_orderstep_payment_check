@@ -26,6 +26,8 @@ Note that this step replaces the `OrderStep_Paid` in most cases.  After that you
 
 In your template `OrderStepPaymentCheck_Email`, you want to add a $Order.RetrieveLink.  
 
-You also want to make sure that customer can cancel and can pay if the order has not been paid yet.
+# CMS Settings
+
+You also want to make sure that customer can cancel and can pay if the order has not been paid yet (see: `http://mysite.co.nz/admin/shop/OrderStep`). 
 
 
