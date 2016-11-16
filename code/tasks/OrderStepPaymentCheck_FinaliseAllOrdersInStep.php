@@ -27,11 +27,11 @@ class OrderStepPaymentCheck_FinaliseAllOrdersInStep extends BuildTask
                 $count = 5;
             }
             if (PHP_SAPI === 'cli') {
-                $count = 5;
+                $count = 500;
             }
 
             //redo ones from the archived step...
-            if (isset($_GET["redoall"])) {
+            if (isset($_GET["redoall"]) && $_GET["redoall"] == 1) {
                 $orderStepArchived = OrderStep_Archived::get()->first();
                 if ($orderStepArchived) {
                     $excludeArray = array(0 => 0);
@@ -71,7 +71,7 @@ class OrderStepPaymentCheck_FinaliseAllOrdersInStep extends BuildTask
                 $position = intval($_GET["position"]);
             }
             if (!intval($position)) {
-                $position = intval(Session::get("FinaliseAllOrdersInStep"));
+                $position = intval(Session::get("OrderStepPaymentCheck_FinaliseAllOrdersInStep"));
                 if (!$position) {
                     $position = 0;
                 }
@@ -96,17 +96,17 @@ class OrderStepPaymentCheck_FinaliseAllOrdersInStep extends BuildTask
                         DB::alteration_message(" - Order ".$order->ID." has a non-existing orderstep", "deleted");
                     }
                     $position++;
-                    Session::set("FinaliseAllOrdersInStep", $position);
+                    Session::set("OrderStepPaymentCheck_FinaliseAllOrdersInStep", $position);
                 }
             } else {
-                Session::clear("FinaliseAllOrdersInStep");
+                Session::clear("OrderStepPaymentCheck_FinaliseAllOrdersInStep");
                 DB::alteration_message("<br /><br /><br /><br /><h1>COMPLETED!</h1>All orders have been moved.", "created");
             }
         } else {
             DB::alteration_message("NO Send Payment Check order step.", "deleted");
         }
-        if (Session::get("FinaliseAllOrdersInStep")) {
-            DB::alteration_message("WAIT: we are still moving more orders ... this page will automatically load the next lot in 5 seconds.", "deleted");
+        if (Session::get("OrderStepPaymentCheck_FinaliseAllOrdersInStep")) {
+            DB::alteration_message("WAIT: we are still moving more orders ... Please relaod this page ....", "deleted");
         }
     }
 }

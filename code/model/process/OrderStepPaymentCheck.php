@@ -66,20 +66,26 @@ class OrderStepPaymentCheck extends OrderStep
 
     public function initStep(Order $order)
     {
+        //make sure we can send emails at all.
         if ($this->SendPaymentCheckEmail) {
             Config::inst()->update("Order_Email", "number_of_days_to_send_update_email", 360);
         }
+
         return true;
     }
 
     public function doStep(Order $order)
     {
+        //if the order has been paid then do not worry about it at all!
+        if ($order->IsPaid()) {
+            return true;
+        }
         //ignore altogether?
-        if ($this->SendPaymentCheckEmail) {
+        elseif ($this->SendPaymentCheckEmail) {
             // too late to send
             if ($this->isExpiredPaymentCheckStep($order)) {
                 if ($this->Config()->get("verbose")) {
-                    DB::alteration_message(" - Time to send payment check is expired");
+                    DB::alteration_message(" - Time to send payment check is expired ... archive email");
                 }
                 return true;
             }
@@ -96,7 +102,13 @@ class OrderStepPaymentCheck extends OrderStep
                     if ($this->Config()->get("verbose")) {
                         DB::alteration_message(" - Sending it now!");
                     }
-                    return $order->sendEmail($subject, $message, $resend = false, $adminOnly = false, $this->getEmailClassName());
+                    return $order->sendEmail(
+                        $subject,
+                        $message,
+                        $resend = false,
+                         $adminOnly = false,
+                         $this->getEmailClassName()
+                    );
                 }
             }
             //wait until later....
@@ -118,20 +130,26 @@ class OrderStepPaymentCheck extends OrderStep
      **/
     public function nextStep(Order $order)
     {
-        if (
+        if ($this->isExpiredPaymentCheckStep($order)) {
+        //archive order as we have lost faith ....
+            return $lastOrderStep = OrderStep::get()->last();
+        } elseif (
             ! $this->SendPaymentCheckEmail || //not sure if we need this
              $this->hasBeenSent($order, false) ||
-             $this->isExpiredPaymentCheckStep($order)
+             $this->isExpiredPaymentCheckStep($order) ||
+             $order->IsPaid()
+
         ) {
             if ($this->Config()->get("verbose")) {
                 DB::alteration_message(" - Moving to next step");
             }
             return parent::nextStep($order);
+        } else {
+            if ($this->Config()->get("verbose")) {
+                DB::alteration_message(" - no next step: has not been sent");
+            }
+            return null;
         }
-        if ($this->Config()->get("verbose")) {
-            DB::alteration_message(" - no next step: has not been sent");
-        }
-        return null;
     }
 
     /**
@@ -149,7 +167,7 @@ class OrderStepPaymentCheck extends OrderStep
      */
     protected function myDescription()
     {
-        return "The customer is sent a  payment check request email.";
+        return "The customer is sent a payment check email.";
     }
 
     /**
