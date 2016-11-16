@@ -24,4 +24,8 @@ Note that this step replaces the `OrderStep_Paid` in most cases.  After that you
 
 # email template
 
-In your template `OrderStepPaymentCheck_Email`, you want to add a $Order.RetrieveLink 
+In your template `OrderStepPaymentCheck_Email`, you want to add a $Order.RetrieveLink.  
+
+You also want to make sure that customer can cancel and can pay if the order has not been paid yet.
+
+
