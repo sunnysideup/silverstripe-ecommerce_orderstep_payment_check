@@ -1,0 +1,5 @@
+---
+Name: ecommerce_orderstep_payment_check
+Before: 'mysite/*'
+After: 'framework/*','cms/*', 'ecommerce/*'
+---
