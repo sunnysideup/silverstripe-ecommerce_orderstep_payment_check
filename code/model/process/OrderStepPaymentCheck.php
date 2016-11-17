@@ -1,5 +1,5 @@
 <?php
-class OrderStep_PaymentCheck extends OrderStep implements OrderStepInterface
+class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
 {
     private static $verbose = false;
 
@@ -16,7 +16,7 @@ class OrderStep_PaymentCheck extends OrderStep implements OrderStepInterface
 
     private static $defaults = array(
         'CustomerCanEdit' => 0,
-        'CustomerCanCancel' => 0,
+        'CustomerCanCancel' => 1,
         'CustomerCanPay' => 0,
         'Name' => 'Send Payment Check',
         'Code' => 'PAYMENTCHECK',
@@ -31,9 +31,17 @@ class OrderStep_PaymentCheck extends OrderStep implements OrderStepInterface
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        $fields->addFieldToTab('Root.CustomerMessage', new CheckboxField('SendPaymentCheckEmail', 'Send payment check email to customer?'), "EmailSubject");
-        $fields->addFieldToTab('Root.CustomerMessage', new NumericField('MinDays', 'Send after a mininum of how many days since placing the order?'));
-        $fields->addFieldToTab('Root.CustomerMessage', new NumericField('MaxDays', 'Send before a maxinum of how many days since placing the order? If set to zero, this step will be ignored.'));
+        $fields->addFieldsToTab(
+            'Root.CustomerMessage',
+            array(
+                CheckboxField::create('SendPaymentCheckEmail', 'Send payment check email to customer?'),
+                $minDaysField = NumericField::create('MinDays', "<strong>Min Days</strong> before sending"),
+                $maxDaysField = NumericField::create('MaxDays', "<strong>Max Days</strong> before sending")
+            ),
+            "EmailSubject"
+        );
+        $minDaysField->setRightTitle('What is the <strong>mininum number of days to wait after a payment has failed</strong> before this email should be sent?');
+        $maxDaysField->setRightTitle('What is the <strong>maxinum number of days to wait after a payment has failed</strong> before this email should be sent?<br><strong>If set to zero, this step will be ignored.</strong>');
         return $fields;
     }
 
