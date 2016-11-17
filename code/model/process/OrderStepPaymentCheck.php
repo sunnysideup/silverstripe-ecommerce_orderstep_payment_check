@@ -1,32 +1,5 @@
 <?php
-
-/**
- *
- * 1 July bough
- * +10 days start sending
- * +20 days stop sending
- * SO
- * on 11 July
- * 1 July + 10 < Now
- * 1 July + 20 > Now
- *
- */
-
-
-/**
- *
- * 1 July bought
- * +10 days start sending
- * +20 days stop sending
- * SO
- * on 11 July
- * 1 July + 10 < Now
- * 1 July + 20 > Now
- *
- */
-
-
-class OrderStepPaymentCheck extends OrderStep
+class OrderStep_PaymentCheck extends OrderStep implements OrderStepInterface
 {
     private static $verbose = false;
 
