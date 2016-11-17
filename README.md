@@ -21,6 +21,7 @@ X is the step number.
 
 Note that this step replaces the `OrderStep_Paid` in most cases.  After that you will need to run a `dev/build?flush` and delete any Ordersteps that can be deleted (see: `http://mysite.co.nz/admin/shop/OrderStep`). 
 
+After the flush you may also need to manually remove the 'Paid' step from the Order Step Settings.
 
 # email template
 
