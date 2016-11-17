@@ -16,7 +16,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
 
     private static $defaults = array(
         'CustomerCanEdit' => 0,
-        'CustomerCanCancel' => 1,
+        'CustomerCanCancel' => 0,
         'CustomerCanPay' => 0,
         'Name' => 'Send Payment Check',
         'Code' => 'PAYMENTCHECK',
