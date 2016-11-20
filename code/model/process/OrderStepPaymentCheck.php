@@ -35,13 +35,13 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
             'Root.CustomerMessage',
             array(
                 CheckboxField::create('SendPaymentCheckEmail', 'Send payment check email to customer?'),
-                $minDaysField = NumericField::create('MinDays', "<strong>Min Days</strong> before sending"),
-                $maxDaysField = NumericField::create('MaxDays', "<strong>Max Days</strong> before sending")
+                $minDaysField = NumericField::create('MinDays', "<strong>Min Days</strong> before sending e-mail"),
+                $maxDaysField = NumericField::create('MaxDays', "<strong>Max Days</strong> before cancelling order")
             ),
             "EmailSubject"
         );
         $minDaysField->setRightTitle('What is the <strong>mininum number of days to wait after a payment has failed</strong> before this email should be sent?');
-        $maxDaysField->setRightTitle('What is the <strong>maxinum number of days to wait after a payment has failed</strong> before this email should be sent?<br><strong>If set to zero, this step will be ignored.</strong>');
+        $maxDaysField->setRightTitle('What is the <strong>maxinum number of days to wait after a payment has failed</strong> before the order should be cancelled.');
         return $fields;
     }
 
@@ -65,9 +65,16 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         elseif ($this->SendPaymentCheckEmail) {
             // too late to send
             if ($this->isExpiredPaymentCheckStep($order)) {
+                //cancel order ....
                 if ($this->Config()->get("verbose")) {
                     DB::alteration_message(" - Time to send payment check is expired ... archive email");
                 }
+                $member = $order->CreateOrReturnExistingMember();
+                if(! $member) {
+                    $member = Member::create();
+                }
+                $order->Cancel($member, _t('OrderStep.CANCELLED_DUE_TO_NON_PAYMENT', 'order cancelled due to non-payment'));
+                
                 return true;
             }
             //is now the right time to send?
@@ -212,6 +219,6 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                 "OrderEmailRecord.OrderStepID" => $this->ID,
                 "OrderEmailRecord.Result" => 1
             )
-        )->count() ? true : false;
+        )->count() ? true : parent::hasBeenSent($order, $checkDateOfOrder);
     }
 }

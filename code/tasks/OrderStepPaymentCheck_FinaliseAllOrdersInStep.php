@@ -7,6 +7,9 @@ class OrderStepPaymentCheck_FinaliseAllOrdersInStep extends BuildTask
 
     protected $description = "Selects all the orders in the Send Payment Check step and tries to finalise them by sending the email.";
 
+    private static $number_of_orders_at_one_time = 5;
+
+    private static $number_of_orders_at_one_time_cli = 500;
     /**
      *@return Integer - number of carts destroyed
      **/
@@ -24,10 +27,10 @@ class OrderStepPaymentCheck_FinaliseAllOrdersInStep extends BuildTask
                 $count = intval($_GET["count"]);
             }
             if (!intval($count)) {
-                $count = 5;
+                $count = Config::inst()->get('OrderStepPaymentCheck_FinaliseAllOrdersInStep', 'number_of_orders_at_one_time');
             }
             if (PHP_SAPI === 'cli') {
-                $count = 500;
+                $count = Config::inst()->get('OrderStepPaymentCheck_FinaliseAllOrdersInStep', 'number_of_orders_at_one_time_cli');
             }
 
             //redo ones from the archived step...
