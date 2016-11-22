@@ -3,9 +3,9 @@
 
 class OrderStepPaymentCheck_FinaliseAllOrdersInStep extends BuildTask
 {
-    protected $title = 'Try to finalise all orders in the Send Payment Check step';
+    protected $title = 'Try to finalise all orders in the Send Payment Reminder step';
 
-    protected $description = "Selects all the orders in the Send Payment Check step and tries to finalise them by sending the email.";
+    protected $description = "Selects all the orders in the Send Payment Reminder step and tries to finalise them by sending the email.";
 
     private static $number_of_orders_at_one_time = 5;
 
@@ -59,7 +59,7 @@ class OrderStepPaymentCheck_FinaliseAllOrdersInStep extends BuildTask
                         foreach ($orders as $order) {
                             $order->StatusID = $orderStepPaymentCheck->ID;
                             $order->write();
-                            DB::alteration_message("Moving Order #".$order->getTitle()." back to Payment Check step to try again");
+                            DB::alteration_message("Moving Order #".$order->getTitle()." back to Payment Reminder step to try again");
                         }
                     } else {
                         DB::alteration_message("There are no archived orders to redo.", "deleted");
@@ -106,7 +106,7 @@ class OrderStepPaymentCheck_FinaliseAllOrdersInStep extends BuildTask
                 DB::alteration_message("<br /><br /><br /><br /><h1>COMPLETED!</h1>All orders have been moved.", "created");
             }
         } else {
-            DB::alteration_message("NO Send Payment Check order step.", "deleted");
+            DB::alteration_message("NO Send Payment Reminder order step.", "deleted");
         }
         if (Session::get("OrderStepPaymentCheck_FinaliseAllOrdersInStep")) {
             DB::alteration_message("WAIT: we are still moving more orders ... Please relaod this page ....", "deleted");

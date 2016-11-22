@@ -18,7 +18,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         'CustomerCanEdit' => 0,
         'CustomerCanCancel' => 0,
         'CustomerCanPay' => 0,
-        'Name' => 'Send Payment Check',
+        'Name' => 'Send Payment Reminder',
         'Code' => 'PAYMENTCHECK',
         "ShowAsInProcessOrder" => true,
         "HideStepFromCustomer" => true,
@@ -34,14 +34,14 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         $fields->addFieldsToTab(
             'Root.CustomerMessage',
             array(
-                CheckboxField::create('SendPaymentCheckEmail', 'Send payment check email to customer?'),
+                CheckboxField::create('SendPaymentCheckEmail', 'Send payment reminder email to customer?'),
                 $minDaysField = NumericField::create('MinDays', "<strong>Min Days</strong> before sending e-mail"),
                 $maxDaysField = NumericField::create('MaxDays', "<strong>Max Days</strong> before cancelling order")
             ),
             "EmailSubject"
         );
-        $minDaysField->setRightTitle('What is the <strong>mininum number of days to wait after a payment has failed</strong> before this email should be sent?');
-        $maxDaysField->setRightTitle('What is the <strong>maxinum number of days to wait after a payment has failed</strong> before the order should be cancelled.');
+        $minDaysField->setRightTitle('What is the <strong>mininum number of days to wait after the order has been placed</strong> before this email should be sent?');
+        $maxDaysField->setRightTitle('What is the <strong>maxinum number of days to wait after the order has been placed </strong> before the order should be cancelled.');
         return $fields;
     }
 
@@ -49,7 +49,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     {
         //make sure we can send emails at all.
         if ($this->SendPaymentCheckEmail) {
-            Config::inst()->update("Order_Email", "number_of_days_to_send_update_email", 360);
+            Config::inst()->update("OrderStep", "number_of_days_to_send_update_email", $this->MaxDays);
         }
 
         return true;
@@ -61,20 +61,24 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         if ($order->IsPaid()) {
             return true;
         }
-        //ignore altogether?
+        //do we send at all?
         elseif ($this->SendPaymentCheckEmail) {
             // too late to send
             if ($this->isExpiredPaymentCheckStep($order)) {
                 //cancel order ....
                 if ($this->Config()->get("verbose")) {
-                    DB::alteration_message(" - Time to send payment check is expired ... archive email");
+                    DB::alteration_message(" - Time to send payment reminder is expired ... archive email");
                 }
+                // cancel as the member placing the order
                 $member = $order->CreateOrReturnExistingMember();
                 if(! $member) {
                     $member = Member::create();
                 }
-                $order->Cancel($member, _t('OrderStep.CANCELLED_DUE_TO_NON_PAYMENT', 'order cancelled due to non-payment'));
-                
+                $order->Cancel(
+                    $member,
+                    _t('OrderStep.CANCELLED_DUE_TO_NON_PAYMENT', 'Cancelled due to non-payment')
+                );
+
                 return true;
             }
             //is now the right time to send?
@@ -85,6 +89,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                     if ($this->Config()->get("verbose")) {
                         DB::alteration_message(" - already sent!");
                     }
+
                     return true; //do nothing
                 } else {
                     if ($this->Config()->get("verbose")) {
@@ -94,8 +99,8 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                         $subject,
                         $message,
                         $resend = false,
-                         $adminOnly = false,
-                         $this->getEmailClassName()
+                        $adminOnly = false,
+                        $this->getEmailClassName()
                     );
                 }
             }
@@ -119,14 +124,11 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     public function nextStep(Order $order)
     {
         if ($this->isExpiredPaymentCheckStep($order)) {
-        //archive order as we have lost faith ....
+            //archive order as we have cancelled...
+
             return $lastOrderStep = OrderStep::get()->last();
         } elseif (
-            ! $this->SendPaymentCheckEmail || //not sure if we need this
-             $this->hasBeenSent($order, false) ||
-             $this->isExpiredPaymentCheckStep($order) ||
              $order->IsPaid()
-
         ) {
             if ($this->Config()->get("verbose")) {
                 DB::alteration_message(" - Moving to next step");
@@ -155,7 +157,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      */
     protected function myDescription()
     {
-        return "The customer is sent a payment check email.";
+        return "The customer is sent a payment reminder email.";
     }
 
     /**
@@ -190,7 +192,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     }
 
     /**
-     * returns true if it is too late to send the  payment check step
+     * returns true if it is too late to send the  payment reminder step
      * @param Order
      * @return Boolean
      */
@@ -201,14 +203,16 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
             if ($log) {
                 $createdTS = strtotime($log->Created);
                 $nowTS = strtotime('now');
-                $stopSendingTS = strtotime("+{$this->MaxDays} days", $createdTS);
+                $stopSendingTS = strtotime('+'.$this->MaxDays.' days', $createdTS);
+
                 return ($stopSendingTS < $nowTS) ? true : false;
             } else {
                 user_error("can not find order log for ".$order->ID);
+                return false;
             }
+        } else {
+            return true;
         }
-        //send forever
-        return false;
     }
 
     public function hasBeenSent(Order $order, $checkDateOfOrder = true)
