@@ -1,9 +1,9 @@
-# Contributing to ecommerce orderstep Send Payment Reminder
+# Contributing to ecommerce orderstep payment check
 
 Please read the
 [generic write up for contributing](https://docs.silverstripe.org/en/4.0/contributing/)
 on silverstripe.org for some general information.  In practice,
-we would be stoked with any Send Payment Reminder / help you can provide.
+we would be stoked with any feedback / help you can provide.
 
 ## Copyright
 

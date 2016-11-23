@@ -71,7 +71,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                 }
                 // cancel as the member placing the order
                 $member = $order->CreateOrReturnExistingMember();
-                if(! $member) {
+                if (! $member) {
                     $member = Member::create();
                 }
                 $order->Cancel(
