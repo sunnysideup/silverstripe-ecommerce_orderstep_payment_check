@@ -72,7 +72,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                 // cancel as the member placing the order
                 $member = $order->CreateOrReturnExistingMember();
                 if (! $member) {
-                    $member = Member::create();
+                    $member = EcommerceRole::get_default_shop_admin_user();
                 }
                 $order->Cancel(
                     $member,
