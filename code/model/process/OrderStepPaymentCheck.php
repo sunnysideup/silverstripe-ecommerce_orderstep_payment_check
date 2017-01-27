@@ -71,6 +71,10 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         if ($order->IsPaid()) {
             return true;
         }
+        //if the order has been pending then do not do the step
+        elseif($order->PaymentIsPending()){
+            return false;
+        }
         //do we send at all?
         elseif ($this->SendPaymentCheckEmail) {
             // too late to send
