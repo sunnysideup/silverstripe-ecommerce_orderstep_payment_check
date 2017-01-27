@@ -35,7 +35,11 @@
                                 <% if RetrieveLink %>
                                     <a href="$RetrieveLink">
                                 <% end_if %>
-                                        Complete Your Order
+                                    <% if $Status.LinkText %>
+                                        $Status.LinkText
+                                    <% else %>
+                                        Complete your order
+                                    <% end_if %>
                                 <% if RetrieveLink %>
                                     </a>
                                 <% end_if %>

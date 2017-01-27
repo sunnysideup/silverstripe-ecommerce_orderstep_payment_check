@@ -11,7 +11,8 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     private static $db = array(
         'SendPaymentCheckEmail' => 'Boolean',
         'MinDays' => 'Int',
-        'MaxDays' => 'Int'
+        'MaxDays' => 'Int',
+        'LinkText' => 'Varchar'
     );
 
     private static $defaults = array(
@@ -42,6 +43,15 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         );
         $minDaysField->setRightTitle('What is the <strong>mininum number of days to wait after the order has been placed</strong> before this email should be sent?');
         $maxDaysField->setRightTitle('What is the <strong>maxinum number of days to wait after the order has been placed </strong> before the order should be cancelled.');
+        $fields->addFieldsToTab(
+            'Root.CustomerMessage',
+            array(
+                TextField::create(
+                    'LinkText',
+                    _t('OrderStepPaymentCheck.BUTTONTEXT', 'Link Text')
+                )->setRightTitle('This is the text displayed on the "complete your order" link/button')
+            )
+        );
         return $fields;
     }
 
