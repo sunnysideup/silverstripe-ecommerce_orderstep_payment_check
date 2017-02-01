@@ -110,11 +110,11 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                         DB::alteration_message(" - Sending it now!");
                     }
                     return $order->sendEmail(
-                        $this->getEmailClassName()
+                        $this->getEmailClassName(),
                         $subject,
                         $message,
                         $resend = false,
-                        $adminOnlyOrToEmail = false,
+                        $adminOnlyOrToEmail = false
                     );
                 }
             }
