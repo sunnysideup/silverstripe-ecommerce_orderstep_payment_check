@@ -71,32 +71,29 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         if ($order->IsPaid()) {
             return true;
         }
-        //if the order has been pending then do not do the step
-        elseif($order->PaymentIsPending()){
-            return false;
+        //if the order has expired then cancel it ...
+        if ($this->isExpiredPaymentCheckStep($order)) {
+            //cancel order ....
+            if ($this->Config()->get("verbose")) {
+                DB::alteration_message(" - Time to send payment reminder is expired ... archive email");
+            }
+            // cancel as admin ...
+            $member = EcommerceRole::get_default_shop_admin_user();
+            $order->Cancel(
+                $member,
+                _t('OrderStep.CANCELLED_DUE_TO_NON_PAYMENT', 'Cancelled due to non-payment')
+            );
+
+            return true;
         }
         //do we send at all?
         elseif ($this->SendPaymentCheckEmail) {
-            // too late to send
-            if ($this->isExpiredPaymentCheckStep($order)) {
-                //cancel order ....
-                if ($this->Config()->get("verbose")) {
-                    DB::alteration_message(" - Time to send payment reminder is expired ... archive email");
-                }
-                // cancel as the member placing the order
-                $member = $order->CreateOrReturnExistingMember();
-                if (! $member) {
-                    $member = EcommerceRole::get_default_shop_admin_user();
-                }
-                $order->Cancel(
-                    $member,
-                    _t('OrderStep.CANCELLED_DUE_TO_NON_PAYMENT', 'Cancelled due to non-payment')
-                );
-
-                return true;
+            //we can not send emails for pending payments, because pending payments can not be paid for ...
+            if($order->PaymentIsPending()) {
+                return false;
             }
             //is now the right time to send?
-            elseif ($this->isReadyToGo($order)) {
+            if ($this->isReadyToGo($order)) {
                 $subject = $this->EmailSubject;
                 $message = $this->CustomerMessage;
                 if ($this->hasBeenSent($order, false)) {
@@ -123,25 +120,25 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                 if ($this->Config()->get("verbose")) {
                     DB::alteration_message(" - We need to wait until minimum number of days.");
                 }
+
                 return false;
             }
         } else {
+
             return true;
         }
     }
 
     /**
-     * can continue if emails has been sent or if there is no need to send a receipt.
+     * can only continue if order has been paid ...
+     *
      * @param DataObject $order Order
+     *
      * @return DataObject | Null - DataObject = next OrderStep
      **/
     public function nextStep(Order $order)
     {
-        if ($this->isExpiredPaymentCheckStep($order)) {
-            //archive order as we have cancelled...
-
-            return $lastOrderStep = OrderStep::get()->last();
-        } elseif (
+        if (
              $order->IsPaid()
         ) {
             if ($this->Config()->get("verbose")) {
