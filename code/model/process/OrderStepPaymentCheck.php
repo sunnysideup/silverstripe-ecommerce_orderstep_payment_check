@@ -89,7 +89,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         //do we send at all?
         elseif ($this->SendPaymentCheckEmail) {
             //we can not send emails for pending payments, because pending payments can not be paid for ...
-            if($order->PaymentIsPending()) {
+            if ($order->PaymentIsPending()) {
                 return false;
             }
             //is now the right time to send?
@@ -124,7 +124,6 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                 return false;
             }
         } else {
-
             return true;
         }
     }
