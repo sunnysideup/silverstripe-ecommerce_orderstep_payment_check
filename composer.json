@@ -2,7 +2,7 @@
     "name": "sunnysideup/ecommerce_orderstep_payment_check",
     "type": "silverstripe-module",
     "description": "add a feedbck step to silverstripe e-commerce",
-    "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Nicolaas Francken",
