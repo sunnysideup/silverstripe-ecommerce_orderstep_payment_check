@@ -229,10 +229,10 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     {
         return OrderEmailRecord::get()->filter(
             array(
-                "OrderEmailRecord.OrderID" => $order->ID,
-                "OrderEmailRecord.OrderStepID" => $this->ID,
-                "OrderEmailRecord.Result" => 1
+                "OrderID" => $order->ID,
+                "OrderStepID" => $this->ID,
+                "Result" => 1
             )
-        )->count() ? true : parent::hasBeenSent($order, $checkDateOfOrder);
+        )->count() ? true : parent::hasBeenSent($order, false);
     }
 }
