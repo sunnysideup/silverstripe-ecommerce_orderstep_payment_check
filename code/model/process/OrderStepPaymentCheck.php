@@ -59,7 +59,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     {
         //make sure we can send emails at all.
         if ($this->SendPaymentCheckEmail) {
-            Config::inst()->update("OrderStep", "number_of_days_to_send_update_email", $this->MaxDays);
+            return Config::inst()->update("OrderStep", "number_of_days_to_send_update_email", $this->MaxDays);
         }
 
         return true;
@@ -79,6 +79,9 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
             }
             // cancel as admin ...
             $member = EcommerceRole::get_default_shop_admin_user();
+            if (! ($member && $member->exists())) {
+                $member = $order->Member();
+            }
             $order->Cancel(
                 $member,
                 _t('OrderStep.CANCELLED_DUE_TO_NON_PAYMENT', 'Cancelled due to non-payment')
@@ -206,7 +209,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      * @param Order
      * @return Boolean
      */
-    protected function isExpiredPaymentCheckStep(Order $order)
+    protected function isExpiredPaymentCheckStep(Order $order) : bool
     {
         if ($this->MaxDays) {
             $log = $order->SubmissionLog();
