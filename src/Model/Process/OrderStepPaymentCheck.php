@@ -2,17 +2,7 @@
 
 namespace Sunnysideup\EcommercePaymentCheck\Model\Process;
 
-
-
-
-
-
-
-
-
-
-
-use Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheck_Email;
+use Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheckEmail;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
@@ -32,7 +22,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     /**
      * @var String
      */
-    protected $emailClassName = OrderStepPaymentCheck_Email::class;
+    protected $emailClassName = OrderStepPaymentCheckEmail::class;
 
 
 /**
