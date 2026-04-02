@@ -14,9 +14,7 @@
         "sunnysideup/ecommerce": "*",
         "silverstripe/recipe-cms": "*"
     },
-    "extra": {
-        "installer-name": "ecommerce_orderstep_payment_check"
-    },
+    "extra": [],
     "keywords": [
         "Silverstripe-CMS",
         "CMS",
