@@ -1,4 +1,18 @@
 <?php
+
+namespace Sunnysideup\EcommercePaymentCheck\Model\Process;
+
+use OrderStep;
+use OrderStepInterface;
+use CheckboxField;
+use NumericField;
+use TextField;
+use Order;
+use Config;
+use DB;
+use EcommerceRole;
+use OrderEmailRecord;
+
 class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
 {
     private static $verbose = false;

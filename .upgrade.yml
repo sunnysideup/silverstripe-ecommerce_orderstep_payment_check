@@ -1,0 +1,3 @@
+mappings:
+  OrderStepPaymentCheck: Sunnysideup\EcommercePaymentCheck\Model\Process\OrderStepPaymentCheck
+  OrderStepPaymentCheck_Email: Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheck_Email
