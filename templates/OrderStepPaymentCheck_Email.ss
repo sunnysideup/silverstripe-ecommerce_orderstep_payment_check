@@ -12,7 +12,7 @@
 
             <tr class="shopAddress">
                 <th>
-                    <% include Sunnysideup\EcommercePaymentCheck\IncludesOrder_ShopInfo_PackingSlip %>
+                    <% include Sunnysideup\EcommercePaymentCheck\Includes\Order_ShopInfo_PackingSlip %>
                 </th>
             </tr>
 
@@ -45,8 +45,8 @@
                                 <% end_if %>
                             </h2>
                             $Title
-                            <% include Sunnysideup\EcommercePaymentCheck\IncludesOrder_Addresses %>
-                            <% include Sunnysideup\EcommercePaymentCheck\IncludesOrder_Content %>
+                            <% include Sunnysideup\EcommercePaymentCheck\Includes\Order_Addresses %>
+                            <% include Sunnysideup\EcommercePaymentCheck\Includes\Order_Content %>
                         </div>
                         <% end_with %>
                     <% else %>

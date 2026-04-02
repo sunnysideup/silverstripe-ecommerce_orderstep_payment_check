@@ -23,12 +23,6 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      */
     protected $emailClassName = OrderStepPaymentCheckEmail::class;
 
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * OLD: private static $db
-     * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
     private static $table_name = 'OrderStepPaymentCheck';
 
     private static $db = [
@@ -59,24 +53,8 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
             [
                 CheckboxField::create('SendPaymentCheckEmail', 'Send payment reminder email to customer?'),
 
-                /**
-                 * ### @@@@ START REPLACEMENT @@@@ ###
-                 * WHY: automated upgrade
-                 * OLD: NumericField::create
-                 * NEW: NumericField::create ...  (COMPLEX)
-                 * EXP: check the number of decimals required and add as ->setScale(2)
-                 * ### @@@@ STOP REPLACEMENT @@@@ ###
-                 */
                 $minDaysField = NumericField::create('MinDays', '<strong>Min Days</strong> before sending e-mail'),
 
-                /**
-                 * ### @@@@ START REPLACEMENT @@@@ ###
-                 * WHY: automated upgrade
-                 * OLD: NumericField::create
-                 * NEW: NumericField::create ...  (COMPLEX)
-                 * EXP: check the number of decimals required and add as ->setScale(2)
-                 * ### @@@@ STOP REPLACEMENT @@@@ ###
-                 */
                 $maxDaysField = NumericField::create('MaxDays', '<strong>Max Days</strong> before cancelling order'),
             ],
             'EmailSubject'
