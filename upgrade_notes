@@ -1,0 +1,23 @@
+2026-04-02 05:16
+
+# running php upgrade upgrade see: https://github.com/silverstripe/silverstripe-upgrader
+cd /home/sdgm/projects/upgrades/upgradeto4
+php /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/bin/upgrade-code upgrade /home/sdgm/projects/upgrades/upgradeto4/ecommerce_orderstep_payment_check  --root-dir=/home/sdgm/projects/upgrades/upgradeto4 --write -vvv
+Array
+(
+    [0] => PHP Fatal error:  Uncaught Humbug\SelfUpdate\Exception\HttpRequestException: file_get_contents(https://packagist.org/p/silverstripe/upgrader.json): failed to open stream: HTTP request failed! HTTP/1.1 403 Forbidden
+    [1] =>  in /home/sdgm/projects/ss3upgrader/vendor/padraic/phar-updater/src/Updater.php:315
+    [2] => Stack trace:
+    [3] => #0 [internal function]: Humbug\SelfUpdate\Updater->throwHttpRequestException(2, 'file_get_conten...', '/home/sdgm/proj...', 42, Array)
+    [4] => #1 /home/sdgm/projects/ss3upgrader/vendor/padraic/humbug_get_contents/src/functions.php(42): file_get_contents('https://packagi...', false, NULL)
+    [5] => #2 /home/sdgm/projects/ss3upgrader/vendor/padraic/phar-updater/src/Strategy/GithubStrategy.php(94): Humbug\get_contents('https://packagi...')
+    [6] => #3 /home/sdgm/projects/ss3upgrader/vendor/padraic/phar-updater/src/Updater.php(325): Humbug\SelfUpdate\Strategy\GithubStrategy->getCurrentRemoteVersion(Object(Humbug\SelfUpdate\Updater))
+    [7] => #4 /home/sdgm/projects/ss3upgrader/vendor/padraic/phar-updater/src/Updater.php(125): Humbug\SelfUpdate\Updater->newVers in /home/sdgm/projects/ss3upgrader/vendor/padraic/phar-updater/src/Updater.php on line 315
+)
+
+
+------------------------------------------------------------------------
+To continue, please use the following parameter: startFrom=Upgrade
+e.g. php runme.php startFrom=Upgrade
+------------------------------------------------------------------------
+            
