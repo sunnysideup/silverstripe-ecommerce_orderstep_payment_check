@@ -2,99 +2,95 @@
 
 namespace Sunnysideup\EcommercePaymentCheck\Model\Process;
 
-use Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheckEmail;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
-use Sunnysideup\Ecommerce\Model\Order;
-use SilverStripe\Core\Config\Config;
-use Sunnysideup\Ecommerce\Model\Process\OrderStep;
 use SilverStripe\ORM\DB;
-use Sunnysideup\Ecommerce\Model\Extensions\EcommerceRole;
-use Sunnysideup\Ecommerce\Model\Process\OrderEmailRecord;
 use Sunnysideup\Ecommerce\Interfaces\OrderStepInterface;
-
+use Sunnysideup\Ecommerce\Model\Extensions\EcommerceRole;
+use Sunnysideup\Ecommerce\Model\Order;
+use Sunnysideup\Ecommerce\Model\Process\OrderEmailRecord;
+use Sunnysideup\Ecommerce\Model\Process\OrderStep;
+use Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheckEmail;
 
 class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
 {
     private static $verbose = false;
 
     /**
-     * @var String
+     * @var string
      */
     protected $emailClassName = OrderStepPaymentCheckEmail::class;
 
-
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * OLD: private static $db
-  * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-    
+    /**
+     * ### @@@@ START REPLACEMENT @@@@ ###
+     * OLD: private static $db
+     * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
+     * ### @@@@ STOP REPLACEMENT @@@@ ###
+     */
     private static $table_name = 'OrderStepPaymentCheck';
 
-    private static $db = array(
+    private static $db = [
         'SendPaymentCheckEmail' => 'Boolean',
         'MinDays' => 'Int',
         'MaxDays' => 'Int',
-        'LinkText' => 'Varchar'
-    );
+        'LinkText' => 'Varchar',
+    ];
 
-    private static $defaults = array(
+    private static $defaults = [
         'CustomerCanEdit' => 0,
         'CustomerCanCancel' => 0,
         'CustomerCanPay' => 0,
         'Name' => 'Send Payment Reminder',
         'Code' => 'PAYMENTCHECK',
-        "ShowAsInProcessOrder" => true,
-        "HideStepFromCustomer" => true,
+        'ShowAsInProcessOrder' => true,
+        'HideStepFromCustomer' => true,
         'SendPaymentCheckEmail' => true,
         'MinDays' => 10,
-        'MaxDays' => 20
-    );
-
+        'MaxDays' => 20,
+    ];
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
         $fields->addFieldsToTab(
             'Root.CustomerMessage',
-            array(
+            [
                 CheckboxField::create('SendPaymentCheckEmail', 'Send payment reminder email to customer?'),
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: automated upgrade
-  * OLD: NumericField::create
-  * NEW: NumericField::create ...  (COMPLEX)
-  * EXP: check the number of decimals required and add as ->setScale(2)
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-                $minDaysField = NumericField::create('MinDays', "<strong>Min Days</strong> before sending e-mail"),
+                /**
+                 * ### @@@@ START REPLACEMENT @@@@ ###
+                 * WHY: automated upgrade
+                 * OLD: NumericField::create
+                 * NEW: NumericField::create ...  (COMPLEX)
+                 * EXP: check the number of decimals required and add as ->setScale(2)
+                 * ### @@@@ STOP REPLACEMENT @@@@ ###
+                 */
+                $minDaysField = NumericField::create('MinDays', '<strong>Min Days</strong> before sending e-mail'),
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: automated upgrade
-  * OLD: NumericField::create
-  * NEW: NumericField::create ...  (COMPLEX)
-  * EXP: check the number of decimals required and add as ->setScale(2)
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-                $maxDaysField = NumericField::create('MaxDays', "<strong>Max Days</strong> before cancelling order")
-            ),
-            "EmailSubject"
+                /**
+                 * ### @@@@ START REPLACEMENT @@@@ ###
+                 * WHY: automated upgrade
+                 * OLD: NumericField::create
+                 * NEW: NumericField::create ...  (COMPLEX)
+                 * EXP: check the number of decimals required and add as ->setScale(2)
+                 * ### @@@@ STOP REPLACEMENT @@@@ ###
+                 */
+                $maxDaysField = NumericField::create('MaxDays', '<strong>Max Days</strong> before cancelling order'),
+            ],
+            'EmailSubject'
         );
         $minDaysField->setRightTitle('What is the <strong>mininum number of days to wait after the order has been placed</strong> before this email should be sent?');
         $maxDaysField->setRightTitle('What is the <strong>maxinum number of days to wait after the order has been placed </strong> before the order should be cancelled.');
         $fields->addFieldsToTab(
             'Root.CustomerMessage',
-            array(
+            [
                 TextField::create(
                     'LinkText',
                     _t('OrderStepPaymentCheck.BUTTONTEXT', 'Link Text')
-                )->setRightTitle('This is the text displayed on the "complete your order" link/button')
-            )
+                )->setRightTitle('This is the text displayed on the "complete your order" link/button'),
+            ]
         );
         return $fields;
     }
@@ -103,7 +99,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     {
         //make sure we can send emails at all.
         if ($this->SendPaymentCheckEmail) {
-            return Config::modify()->update(OrderStep::class, "number_of_days_to_send_update_email", $this->MaxDays);
+            return Config::modify()->update(OrderStep::class, 'number_of_days_to_send_update_email', $this->MaxDays);
         }
 
         return true;
@@ -118,8 +114,8 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         //if the order has expired then cancel it ...
         if ($this->isExpiredPaymentCheckStep($order)) {
             //cancel order ....
-            if ($this->Config()->get("verbose")) {
-                DB::alteration_message(" - Time to send payment reminder is expired ... archive email");
+            if ($this->Config()->get('verbose')) {
+                DB::alteration_message(' - Time to send payment reminder is expired ... archive email');
             }
             // cancel as admin ...
             $member = EcommerceRole::get_default_shop_admin_user();
@@ -144,14 +140,14 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                 $subject = $this->EmailSubject;
                 $message = $this->CustomerMessage;
                 if ($this->hasBeenSent($order, false)) {
-                    if ($this->Config()->get("verbose")) {
-                        DB::alteration_message(" - already sent!");
+                    if ($this->Config()->get('verbose')) {
+                        DB::alteration_message(' - already sent!');
                     }
 
                     return true; //do nothing
                 } else {
-                    if ($this->Config()->get("verbose")) {
-                        DB::alteration_message(" - Sending it now!");
+                    if ($this->Config()->get('verbose')) {
+                        DB::alteration_message(' - Sending it now!');
                     }
                     return $order->sendEmail(
                         $this->getEmailClassName(),
@@ -164,8 +160,8 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
             }
             //wait until later....
             else {
-                if ($this->Config()->get("verbose")) {
-                    DB::alteration_message(" - We need to wait until minimum number of days.");
+                if ($this->Config()->get('verbose')) {
+                    DB::alteration_message(' - We need to wait until minimum number of days.');
                 }
 
                 return false;
@@ -180,20 +176,20 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      *
      * @param DataObject $order Order
      *
-     * @return DataObject | Null - DataObject = next OrderStep
+     * @return DataObject | null - DataObject = next OrderStep
      **/
     public function nextStep(Order $order)
     {
         if (
-             $order->IsPaid()
+            $order->IsPaid()
         ) {
-            if ($this->Config()->get("verbose")) {
-                DB::alteration_message(" - Moving to next step");
+            if ($this->Config()->get('verbose')) {
+                DB::alteration_message(' - Moving to next step');
             }
             return parent::nextStep($order);
         } else {
-            if ($this->Config()->get("verbose")) {
-                DB::alteration_message(" - no next step: has not been sent");
+            if ($this->Config()->get('verbose')) {
+                DB::alteration_message(' - no next step: has not been sent');
             }
             return null;
         }
@@ -201,7 +197,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
 
     /**
      * For some ordersteps this returns true...
-     * @return Boolean
+     * @return boolean
      **/
     protected function hasCustomerMessage()
     {
@@ -210,17 +206,17 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
 
     /**
      * Explains the current order step.
-     * @return String
+     * @return string
      */
     protected function myDescription()
     {
-        return "The customer is sent a payment reminder email.";
+        return 'The customer is sent a payment reminder email.';
     }
 
     /**
      * returns true if the Minimum number of days is met....
      * @param Order
-     * @return Boolean
+     * @return boolean
      */
     protected function isReadyToGo(Order $order)
     {
@@ -234,12 +230,12 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                 //order TS = 8
                 //add 4 days: 12
                 //thus if 12 <= now then go for it (start point in time has passed)
-                if ($this->Config()->get("verbose")) {
-                    DB::alteration_message("Time comparison: Start Sending TS: ".$startSendingTS." current TS: ".$nowTS.". If SSTS > NowTS then Go for it.");
+                if ($this->Config()->get('verbose')) {
+                    DB::alteration_message('Time comparison: Start Sending TS: ' . $startSendingTS . ' current TS: ' . $nowTS . '. If SSTS > NowTS then Go for it.');
                 }
-                return ($startSendingTS <= $nowTS) ? true : false;
+                return $startSendingTS <= $nowTS;
             } else {
-                user_error("can not find order log for ".$order->ID);
+                user_error('can not find order log for ' . $order->ID);
                 return false;
             }
         } else {
@@ -251,20 +247,19 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     /**
      * returns true if it is too late to send the  payment reminder step
      * @param Order
-     * @return Boolean
      */
-    protected function isExpiredPaymentCheckStep(Order $order) : bool
+    protected function isExpiredPaymentCheckStep(Order $order): bool
     {
         if ($this->MaxDays) {
             $log = $order->SubmissionLog();
             if ($log) {
                 $createdTS = strtotime($log->Created);
                 $nowTS = strtotime('now');
-                $stopSendingTS = strtotime('+'.$this->MaxDays.' days', $createdTS);
+                $stopSendingTS = strtotime('+' . $this->MaxDays . ' days', $createdTS);
 
-                return ($stopSendingTS < $nowTS) ? true : false;
+                return $stopSendingTS < $nowTS;
             } else {
-                user_error("can not find order log for ".$order->ID);
+                user_error('can not find order log for ' . $order->ID);
                 return false;
             }
         } else {
@@ -275,13 +270,11 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     public function hasBeenSent(Order $order, $checkDateOfOrder = true)
     {
         return OrderEmailRecord::get()->filter(
-            array(
-                "OrderID" => $order->ID,
-                "OrderStepID" => $this->ID,
-                "Result" => 1
-            )
+            [
+                'OrderID' => $order->ID,
+                'OrderStepID' => $this->ID,
+                'Result' => 1,
+            ]
         )->count() ? true : parent::hasBeenSent($order, false);
     }
 }
-
-

@@ -8,5 +8,3 @@ class OrderStepPaymentCheckEmail extends OrderEmail
 {
     protected $ss_template = OrderStepPaymentCheck_Email::class;
 }
-
-
