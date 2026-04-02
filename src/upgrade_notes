@@ -210,3 +210,58 @@ To continue, please use the following parameter: startFrom=InspectAPIChanges-1
 e.g. php runme.php startFrom=InspectAPIChanges-1
 ------------------------------------------------------------------------
             
+# running php upgrade inspect see: https://github.com/silverstripe/silverstripe-upgrader
+cd /home/sdgm/projects/upgrades/upgradeto4
+php /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/bin/upgrade-code inspect /home/sdgm/projects/upgrades/upgradeto4/ecommerce_orderstep_payment_check/src  --root-dir=/home/sdgm/projects/upgrades/upgradeto4 --write -vvv
+Array
+(
+    [0] => Running post-upgrade on "/home/sdgm/projects/upgrades/upgradeto4/ecommerce_orderstep_payment_check/src"
+    [1] => [2026-04-02 17:39:32] Applying ApiChangeWarningsRule to OrderStepPaymentCheck.php...
+    [2] => 
+    [3] => In Broker.php line 215:
+    [4] => 
+    [5] =>   [PHPStan\Broker\ClassAutoloadingException]
+    [6] =>   Class Sunnysideup\EcommercePaymentCheck\Email\Order_Email not found and could not be autoloaded.
+    [7] => 
+    [8] => 
+    [9] => Exception trace:
+    [10] =>   at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Broker/Broker.php:215
+    [11] =>  PHPStan\Broker\Broker->PHPStan\Broker\{closure}() at n/a:n/a
+    [12] =>  spl_autoload_call() at /home/sdgm/projects/upgrades/upgradeto4/ecommerce_orderstep_payment_check/src/Email/OrderStepPaymentCheck_Email.php:10
+    [13] =>  include() at /home/sdgm/projects/ss3upgrader/vendor/composer/ClassLoader.php:576
+    [14] =>  Composer\Autoload\{closure}() at /home/sdgm/projects/ss3upgrader/vendor/composer/ClassLoader.php:427
+    [15] =>  Composer\Autoload\ClassLoader->loadClass() at n/a:n/a
+    [16] =>  spl_autoload_call() at n/a:n/a
+    [17] =>  class_exists() at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Broker/Broker.php:220
+    [18] =>  PHPStan\Broker\Broker->hasClass() at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Rules/ClassCaseSensitivityCheck.php:27
+    [19] =>  PHPStan\Rules\ClassCaseSensitivityCheck->checkClassNames() at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Rules/Namespaces/ExistingNamesInUseRule.php:117
+    [20] =>  PHPStan\Rules\Namespaces\ExistingNamesInUseRule->checkClasses() at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Rules/Namespaces/ExistingNamesInUseRule.php:62
+    [21] =>  PHPStan\Rules\Namespaces\ExistingNamesInUseRule->processNode() at /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php:80
+    [22] =>  SilverStripe\Upgrader\UpgradeRule\PHP\Visitor\PHPStanScopeVisitor->SilverStripe\Upgrader\UpgradeRule\PHP\Visitor\{closure}() at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Analyser/NodeScopeResolver.php:316
+    [23] =>  PHPStan\Analyser\NodeScopeResolver->processNode() at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Analyser/NodeScopeResolver.php:176
+    [24] =>  PHPStan\Analyser\NodeScopeResolver->processNodes() at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Analyser/NodeScopeResolver.php:699
+    [25] =>  PHPStan\Analyser\NodeScopeResolver->processNode() at /home/sdgm/projects/ss3upgrader/vendor/phpstan/phpstan/src/Analyser/NodeScopeResolver.php:176
+    [26] =>  PHPStan\Analyser\NodeScopeResolver->processNodes() at /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php:82
+    [27] =>  SilverStripe\Upgrader\UpgradeRule\PHP\Visitor\PHPStanScopeVisitor->enterNode() at /home/sdgm/projects/ss3upgrader/vendor/nikic/php-parser/lib/PhpParser/NodeTraverser.php:159
+    [28] =>  PhpParser\NodeTraverser->traverseArray() at /home/sdgm/projects/ss3upgrader/vendor/nikic/php-parser/lib/PhpParser/NodeTraverser.php:85
+    [29] =>  PhpParser\NodeTraverser->traverse() at /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/src/UpgradeRule/PHP/PHPUpgradeRule.php:28
+    [30] =>  SilverStripe\Upgrader\UpgradeRule\PHP\PHPUpgradeRule->transformWithVisitors() at /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/src/UpgradeRule/PHP/ApiChangeWarningsRule.php:88
+    [31] =>  SilverStripe\Upgrader\UpgradeRule\PHP\ApiChangeWarningsRule->mutateSourceWithVisitors() at /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/src/UpgradeRule/PHP/ApiChangeWarningsRule.php:60
+    [32] =>  SilverStripe\Upgrader\UpgradeRule\PHP\ApiChangeWarningsRule->upgradeFile() at /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/src/Upgrader.php:61
+    [33] =>  SilverStripe\Upgrader\Upgrader->upgrade() at /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/src/Console/InspectCommand.php:88
+    [34] =>  SilverStripe\Upgrader\Console\InspectCommand->execute() at /home/sdgm/projects/ss3upgrader/vendor/symfony/console/Command/Command.php:255
+    [35] =>  Symfony\Component\Console\Command\Command->run() at /home/sdgm/projects/ss3upgrader/vendor/symfony/console/Application.php:1021
+    [36] =>  Symfony\Component\Console\Application->doRunCommand() at /home/sdgm/projects/ss3upgrader/vendor/symfony/console/Application.php:275
+    [37] =>  Symfony\Component\Console\Application->doRun() at /home/sdgm/projects/ss3upgrader/vendor/symfony/console/Application.php:149
+    [38] =>  Symfony\Component\Console\Application->run() at /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/bin/upgrade-code:55
+    [39] => 
+    [40] => inspect [-d|--root-dir ROOT-DIR] [-w|--write] [--skip-visibility] [--] <path>
+    [41] => 
+)
+
+
+------------------------------------------------------------------------
+To continue, please use the following parameter: startFrom=InspectAPIChanges-1
+e.g. php runme.php startFrom=InspectAPIChanges-1
+------------------------------------------------------------------------
+            

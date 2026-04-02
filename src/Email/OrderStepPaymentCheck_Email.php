@@ -7,7 +7,7 @@ use Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheck_Email;
 
 
 
-class OrderStepPaymentCheck_Email extends Order_Email
+class OrderStepPaymentCheck_Email extends OrderEmail
 {
     protected $ss_template = OrderStepPaymentCheck_Email::class;
 }
