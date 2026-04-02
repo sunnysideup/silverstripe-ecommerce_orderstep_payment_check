@@ -1,0 +1,4 @@
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    OrderStepPaymentCheck: Sunnysideup\EcommercePaymentCheck\Model\Process\OrderStepPaymentCheck
+    OrderStepPaymentCheck_Email: Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheck_Email
