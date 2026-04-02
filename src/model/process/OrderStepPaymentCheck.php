@@ -46,7 +46,25 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
             'Root.CustomerMessage',
             array(
                 CheckboxField::create('SendPaymentCheckEmail', 'Send payment reminder email to customer?'),
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: NumericField::create
+  * NEW: NumericField::create ...  (COMPLEX)
+  * EXP: check the number of decimals required and add as ->setScale(2)
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
                 $minDaysField = NumericField::create('MinDays', "<strong>Min Days</strong> before sending e-mail"),
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: NumericField::create
+  * NEW: NumericField::create ...  (COMPLEX)
+  * EXP: check the number of decimals required and add as ->setScale(2)
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
                 $maxDaysField = NumericField::create('MaxDays', "<strong>Max Days</strong> before cancelling order")
             ),
             "EmailSubject"
@@ -69,7 +87,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     {
         //make sure we can send emails at all.
         if ($this->SendPaymentCheckEmail) {
-            return Config::inst()->update("OrderStep", "number_of_days_to_send_update_email", $this->MaxDays);
+            return Config::modify()->update("OrderStep", "number_of_days_to_send_update_email", $this->MaxDays);
         }
 
         return true;
