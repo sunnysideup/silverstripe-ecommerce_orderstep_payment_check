@@ -265,3 +265,14 @@ To continue, please use the following parameter: startFrom=InspectAPIChanges-1
 e.g. php runme.php startFrom=InspectAPIChanges-1
 ------------------------------------------------------------------------
             
+# running php upgrade inspect see: https://github.com/silverstripe/silverstripe-upgrader
+cd /home/sdgm/projects/upgrades/upgradeto4
+php /home/sdgm/projects/ss3upgrader/vendor/silverstripe/upgrader/bin/upgrade-code inspect /home/sdgm/projects/upgrades/upgradeto4/ecommerce_orderstep_payment_check/src  --root-dir=/home/sdgm/projects/upgrades/upgradeto4 --write -vvv
+Writing changes for 0 files
+Running post-upgrade on "/home/sdgm/projects/upgrades/upgradeto4/ecommerce_orderstep_payment_check/src"
+[2026-04-02 17:40:01] Applying ApiChangeWarningsRule to OrderStepPaymentCheck.php...
+[2026-04-02 17:40:02] Applying UpdateVisibilityRule to OrderStepPaymentCheck.php...
+[2026-04-02 17:40:02] Applying ApiChangeWarningsRule to OrderStepPaymentCheck_Email.php...
+[2026-04-02 17:40:02] Applying UpdateVisibilityRule to OrderStepPaymentCheck_Email.php...
+Writing changes for 0 files
+✔✔✔
