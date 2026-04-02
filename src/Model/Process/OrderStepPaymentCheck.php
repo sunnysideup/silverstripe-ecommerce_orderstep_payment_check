@@ -2,16 +2,28 @@
 
 namespace Sunnysideup\EcommercePaymentCheck\Model\Process;
 
-use OrderStep;
-use OrderStepInterface;
-use CheckboxField;
-use NumericField;
-use TextField;
-use Order;
-use Config;
-use DB;
-use EcommerceRole;
-use OrderEmailRecord;
+
+
+
+
+
+
+
+
+
+
+use Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheck_Email;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\TextField;
+use Sunnysideup\Ecommerce\Model\Order;
+use SilverStripe\Core\Config\Config;
+use Sunnysideup\Ecommerce\Model\Process\OrderStep;
+use SilverStripe\ORM\DB;
+use Sunnysideup\Ecommerce\Model\Extensions\EcommerceRole;
+use Sunnysideup\Ecommerce\Model\Process\OrderEmailRecord;
+use Sunnysideup\Ecommerce\Interfaces\OrderStepInterface;
+
 
 class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
 {
@@ -20,7 +32,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     /**
      * @var String
      */
-    protected $emailClassName = "OrderStepPaymentCheck_Email";
+    protected $emailClassName = OrderStepPaymentCheck_Email::class;
 
 
 /**
@@ -101,7 +113,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
     {
         //make sure we can send emails at all.
         if ($this->SendPaymentCheckEmail) {
-            return Config::modify()->update("OrderStep", "number_of_days_to_send_update_email", $this->MaxDays);
+            return Config::modify()->update(OrderStep::class, "number_of_days_to_send_update_email", $this->MaxDays);
         }
 
         return true;
