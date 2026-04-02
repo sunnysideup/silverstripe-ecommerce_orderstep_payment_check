@@ -19,5 +19,10 @@
         "Silverstripe-CMS",
         "CMS",
         "Silverstripe"
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sunnysideup\\EcommercePaymentCheck\\": "src/"
+        }
+    }
 }
