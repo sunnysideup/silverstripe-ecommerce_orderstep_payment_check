@@ -11,9 +11,7 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "~3.6",
-        "sunnysideup/ecommerce": "*",
-        "silverstripe/cms": "~3.6"
+        "sunnysideup/ecommerce": "*"
     },
     "extra": {
         "installer-name": "ecommerce_orderstep_payment_check"
