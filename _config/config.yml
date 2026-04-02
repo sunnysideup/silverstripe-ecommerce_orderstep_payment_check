@@ -1,5 +1,6 @@
 ---
 Name: ecommerce_orderstep_payment_check
-Before: 'mysite/*'
+Before: 'app/*'
 After: 'framework/*','cms/*', 'ecommerce/*'
 ---
+{  }
