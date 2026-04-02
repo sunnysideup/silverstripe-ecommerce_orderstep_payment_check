@@ -8,6 +8,16 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      */
     protected $emailClassName = "OrderStepPaymentCheck_Email";
 
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * OLD: private static $db
+  * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+    
+    private static $table_name = 'OrderStepPaymentCheck';
+
     private static $db = array(
         'SendPaymentCheckEmail' => 'Boolean',
         'MinDays' => 'Int',
