@@ -239,3 +239,4 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         )->count() ? true : parent::hasBeenSent($order, false);
     }
 }
+
