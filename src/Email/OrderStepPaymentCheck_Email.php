@@ -2,7 +2,7 @@
 
 namespace Sunnysideup\EcommercePaymentCheck\Email;
 
-use Order_Email;
+use Sunnysideup\Ecommerce\Email\Order_Email;
 use Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheck_Email;
 
 
