@@ -1,6 +1,6 @@
 {
     "name": "sunnysideup/ecommerce_orderstep_payment_check",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "description": "add a feedbck step to silverstripe e-commerce",
     "license": "BSD-3-Clause",
     "authors": [
