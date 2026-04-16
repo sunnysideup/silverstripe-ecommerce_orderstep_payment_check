@@ -73,7 +73,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         return $fields;
     }
 
-    public function initStep(Order $order)
+    public function initStep(Order $order): bool
     {
         //make sure we can send emails at all.
         if ($this->SendPaymentCheckEmail) {
@@ -83,7 +83,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         return true;
     }
 
-    public function doStep(Order $order)
+    public function doStep(Order $order): bool
     {
         //if the order has been paid then do not worry about it at all!
         if ($order->IsPaid()) {
@@ -156,7 +156,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      *
      * @return DataObject | null - DataObject = next OrderStep
      **/
-    public function nextStep(Order $order)
+    public function nextStep(Order $order): ?OrderStep
     {
         if (
             $order->IsPaid()
@@ -177,7 +177,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      * For some ordersteps this returns true...
      * @return boolean
      **/
-    protected function hasCustomerMessage()
+    public function hasCustomerMessage()
     {
         return true;
     }
