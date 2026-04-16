@@ -3,7 +3,6 @@ Name: ecommerce_orderstep_payment_check
 Before: 'app/*'
 After:
  - 'framework/*'
- - 'cms/*'
  - 'ecommerce/*'
 ---
 {  }
