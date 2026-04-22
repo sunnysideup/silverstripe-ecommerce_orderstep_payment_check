@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\EcommercePaymentCheck\Model\Process;
 
+use Override;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\NumericField;
@@ -45,6 +46,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         'MaxDays' => 20,
     ];
 
+    #[Override]
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -73,6 +75,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         return $fields;
     }
 
+    #[Override]
     public function initStep(Order $order): bool
     {
         //make sure we can send emails at all.
@@ -83,6 +86,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         return true;
     }
 
+    #[Override]
     public function doStep(Order $order): bool
     {
         //if the order has been paid then do not worry about it at all!
@@ -161,6 +165,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      *
      * @return DataObject | null - DataObject = next OrderStep
      **/
+    #[Override]
     public function nextStep(Order $order): ?OrderStep
     {
         if (
@@ -184,6 +189,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      * For some ordersteps this returns true...
      * @return boolean
      **/
+    #[Override]
     public function hasCustomerMessage()
     {
         return true;
@@ -193,6 +199,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
      * Explains the current order step.
      * @return string
      */
+    #[Override]
     protected function myDescription()
     {
         return 'The customer is sent a payment reminder email.';
@@ -253,6 +260,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         }
     }
 
+    #[Override]
     public function hasBeenSent(Order $order, $checkDateOfOrder = true)
     {
         return OrderEmailRecord::get()->filter(
