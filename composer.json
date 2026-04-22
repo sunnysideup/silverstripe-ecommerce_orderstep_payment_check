@@ -1,28 +1,29 @@
 {
-    "name": "sunnysideup/ecommerce_orderstep_payment_check",
-    "type": "silverstripe-vendormodule",
-    "description": "add a feedbck step to silverstripe e-commerce",
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Nicolaas Francken",
-            "email": "modules@sunnysideup.co.nz",
-            "role": "lead developer"
-        }
-    ],
-    "require": {
-        "sunnysideup/ecommerce": "*",
-        "silverstripe/recipe-cms": "*"
-    },
-    "extra": [],
-    "keywords": [
-        "Silverstripe-CMS",
-        "CMS",
-        "Silverstripe"
-    ],
-    "autoload": {
-        "psr-4": {
-            "Sunnysideup\\EcommercePaymentCheck\\": "src/"
-        }
+  "name": "sunnysideup/ecommerce_orderstep_payment_check",
+  "type": "silverstripe-vendormodule",
+  "description": "add a feedbck step to silverstripe e-commerce",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Nicolaas Francken",
+      "email": "modules@sunnysideup.co.nz",
+      "role": "lead developer"
     }
+  ],
+  "require": {
+    "sunnysideup/ecommerce": "5.x-dev",
+    "silverstripe/recipe-cms": "^5.0"
+  },
+  "extra": [],
+  "keywords": [
+    "Silverstripe-CMS",
+    "CMS",
+    "Silverstripe"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Sunnysideup\\EcommercePaymentCheck\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
 }
