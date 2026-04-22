@@ -89,17 +89,20 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         if ($order->IsPaid()) {
             return true;
         }
+
         //if the order has expired then cancel it ...
         if ($this->isExpiredPaymentCheckStep($order)) {
             //cancel order ....
             if ($this->Config()->get('verbose')) {
                 DB::alteration_message(' - Time to send payment reminder is expired ... archive email');
             }
+
             // cancel as admin ...
             $member = EcommerceRole::get_default_shop_admin_user();
             if (! ($member && $member->exists())) {
                 $member = $order->Member();
             }
+
             $order->Cancel(
                 $member,
                 _t('OrderStep.CANCELLED_DUE_TO_NON_PAYMENT', 'Cancelled due to non-payment')
@@ -113,6 +116,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
             if ($order->PaymentIsPending()) {
                 return false;
             }
+
             //is now the right time to send?
             if ($this->isReadyToGo($order)) {
                 $subject = $this->EmailSubject;
@@ -127,6 +131,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                     if ($this->Config()->get('verbose')) {
                         DB::alteration_message(' - Sending it now!');
                     }
+
                     return $order->sendEmail(
                         $this->getEmailClassName(),
                         $subject,
@@ -164,11 +169,13 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
             if ($this->Config()->get('verbose')) {
                 DB::alteration_message(' - Moving to next step');
             }
+
             return parent::nextStep($order);
         } else {
             if ($this->Config()->get('verbose')) {
                 DB::alteration_message(' - no next step: has not been sent');
             }
+
             return null;
         }
     }
@@ -201,9 +208,9 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         if ($this->MinDays) {
             $log = $order->SubmissionLog();
             if ($log) {
-                $createdTS = strtotime($log->Created);
+                $createdTS = strtotime((string) $log->Created);
                 $nowTS = strtotime('now');
-                $startSendingTS = strtotime("+{$this->MinDays} days", $createdTS);
+                $startSendingTS = strtotime(sprintf('+%s days', $this->MinDays), $createdTS);
                 //current TS = 10
                 //order TS = 8
                 //add 4 days: 12
@@ -211,6 +218,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
                 if ($this->Config()->get('verbose')) {
                     DB::alteration_message('Time comparison: Start Sending TS: ' . $startSendingTS . ' current TS: ' . $nowTS . '. If SSTS > NowTS then Go for it.');
                 }
+
                 return $startSendingTS <= $nowTS;
             } else {
                 user_error('can not find order log for ' . $order->ID);
@@ -231,7 +239,7 @@ class OrderStepPaymentCheck extends OrderStep implements OrderStepInterface
         if ($this->MaxDays) {
             $log = $order->SubmissionLog();
             if ($log) {
-                $createdTS = strtotime($log->Created);
+                $createdTS = strtotime((string) $log->Created);
                 $nowTS = strtotime('now');
                 $stopSendingTS = strtotime('+' . $this->MaxDays . ' days', $createdTS);
 
