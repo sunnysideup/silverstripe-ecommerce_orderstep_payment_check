@@ -1,0 +1,2 @@
+mappings:
+  OrderStepPaymentCheck_Email: Sunnysideup\EcommercePaymentCheck\Email\OrderStepPaymentCheckEmail
