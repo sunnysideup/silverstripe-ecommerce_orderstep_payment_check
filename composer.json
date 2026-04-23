@@ -11,8 +11,7 @@
     }
   ],
   "require": {
-    "sunnysideup/ecommerce": "5.x-dev",
-    "silverstripe/recipe-cms": "^5.0"
+    "silverstripe/recipe-cms": "^6.0"
   },
   "extra": [],
   "keywords": [
@@ -25,5 +24,12 @@
       "Sunnysideup\\EcommercePaymentCheck\\": "src/"
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "yet-to-update": {
+    "sunnysideup/ecommerce": {
+      "section": "require",
+      "current": "^5.0-dev",
+      "reason": "no-compatible-stable-release"
+    }
+  }
 }
