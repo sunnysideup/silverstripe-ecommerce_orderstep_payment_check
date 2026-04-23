@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "sunnysideup/ecommerce": "5.x-dev",
+    "sunnysideup/ecommerce": "^5.0-dev",
     "silverstripe/recipe-cms": "^5.0"
   },
   "extra": [],
